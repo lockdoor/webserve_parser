@@ -1,7 +1,17 @@
 #include "Configs.hpp"
 
-cfg::Http::Http(std::ifstream &file) : AConfigs("http")
+cfg::Location::Location(std::ifstream &file) : AConfigs("location")
 {
+	// parser location
+	if (file.peek() <= 0) 
+		throw (std::runtime_error("Error: " + this->getType()));
+	if (file.eof()) 
+		throw (std::runtime_error("Error: " + this->getType()));
+	bool found_semicolon = getString(_location, file);
+	if (found_semicolon)
+		throw (std::runtime_error("Error: " + this->getType()));
+
+	// parser block
 	std::string directive;
 	file.peek();
 
@@ -23,8 +33,8 @@ cfg::Http::Http(std::ifstream &file) : AConfigs("http")
 			if (directive == "}") break;
 			else if (directive == "index")
 				dir = new Index(file);
-			else if (directive == "server")
-				dir = new Server(file);
+			else if (directive == "root")
+				dir = new Root(file);
 			else
 				throw(std::runtime_error(this->getType() + "Error: unknow directive " + directive));
 			_configs.push_back(dir);
@@ -34,7 +44,9 @@ cfg::Http::Http(std::ifstream &file) : AConfigs("http")
 	}
 }
 
-cfg::Http::~Http()
-{
+cfg::Location::~Location(){}
 
+std::string const & cfg::Location::getLocation() const
+{
+	return (_location);
 }

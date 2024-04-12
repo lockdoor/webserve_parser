@@ -1,6 +1,6 @@
 #include "Configs.hpp"
 
-cfg::Http::Http(std::ifstream &file) : AConfigs("http")
+cfg::Server::Server(std::ifstream &file) : AConfigs("server")
 {
 	std::string directive;
 	file.peek();
@@ -23,8 +23,12 @@ cfg::Http::Http(std::ifstream &file) : AConfigs("http")
 			if (directive == "}") break;
 			else if (directive == "index")
 				dir = new Index(file);
-			else if (directive == "server")
-				dir = new Server(file);
+			else if (directive == "listen")
+				dir = new Listen(file);
+			else if (directive == "root")
+				dir = new Root(file);
+			else if (directive == "location")
+				dir = new Location(file);
 			else
 				throw(std::runtime_error(this->getType() + "Error: unknow directive " + directive));
 			_configs.push_back(dir);
@@ -34,7 +38,4 @@ cfg::Http::Http(std::ifstream &file) : AConfigs("http")
 	}
 }
 
-cfg::Http::~Http()
-{
-
-}
+cfg::Server::~Server() {}
