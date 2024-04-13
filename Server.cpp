@@ -36,3 +36,6 @@ void cfg::Server::init(std::ifstream &file)
 		}
 	}
 }
+
+void cfg::Server::validate() const
+{}

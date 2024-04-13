@@ -46,3 +46,8 @@ std::string const & cfg::Location::getLocation() const
 {
 	return (_location);
 }
+
+void cfg::Location::validate() const
+{
+	
+}

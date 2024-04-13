@@ -35,3 +35,6 @@ void cfg::Http::init(std::ifstream &file)
 		}
 	}
 }
+
+void cfg::Http::validate() const
+{}

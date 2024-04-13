@@ -15,7 +15,7 @@ cfg::Listen::Listen(std::ifstream &file) : AConfig("listen")
 	if (sep != std::string::npos)
 	{
 		_listen.first = buffer.substr(0, sep);
-		_listen.second = buffer.substr(sep);
+		_listen.second = buffer.substr(sep + 1);
 	}
 	else
 	{

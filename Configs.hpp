@@ -10,10 +10,12 @@
 #include <string>
 #include <iostream>
 
+
+
 namespace cfg
 {
-	
-	
+	typedef std::map<std::string, std::vector<std::string> > Listens;
+
 	class AConfig
 	{
 		private:
@@ -35,20 +37,22 @@ namespace cfg
 			std::string indent() const;
 	};
 
+	typedef std::vector<AConfig*>::const_iterator config_itc;
+
 	class AConfigs : public AConfig
 	{
 		protected:
 			std::vector<AConfig*> _configs;
-			void setGroupLevel(int n, 
-				std::vector<AConfig*>::const_iterator begin,
-				std::vector<AConfig*>::const_iterator end
-				);
+			void virtual validate() const = 0;
 		public:
 			AConfigs(std::string const &type);
 			virtual ~AConfigs();
-			std::vector<AConfig*>::const_iterator begin() const;
-			std::vector<AConfig*>::const_iterator end() const;
+			config_itc begin() const;
+			config_itc end() const;
 			std::size_t size() const;
+
+			void setGroupLevel(int n, config_itc begin, config_itc end);
+			void getListen(Listens &listen, config_itc begin, config_itc end) const;
 	};
 
 	class AGroup : public AConfigs
@@ -63,15 +67,19 @@ namespace cfg
 
 	class Configs : public AConfigs
 	{
+		private:
+			void validate() const;
 		public:
 			Configs(std::string const &filename);
 			~Configs();
+			
 	};
 
 	class Http : public AGroup
 	{
 		private:
 			void init(std::ifstream &file);
+			void validate() const;
 		public:
 			Http(std::ifstream &file);
 			~Http();
@@ -81,9 +89,22 @@ namespace cfg
 	{
 		private:
 			void init(std::ifstream &file);
+			void validate() const;
 		public:
 			Server(std::ifstream &file);
 			~Server();
+	};
+
+	class Location : public AGroup
+	{
+		private:
+			std::string _location;
+			void init(std::ifstream &file);
+			void validate() const;
+		public:
+			Location(std::ifstream &file);
+			~Location();
+			std::string const &getLocation() const;
 	};
 	
 	class Worker_processes : public AConfig
@@ -128,16 +149,7 @@ namespace cfg
 			std::string const &getRoot() const;
 	};
 
-	class Location : public AGroup
-	{
-		private:
-			std::string _location;
-			void init(std::ifstream &file);
-		public:
-			Location(std::ifstream &file);
-			~Location();
-			std::string const &getLocation() const;
-	};
+
 }
 
 std::ostream & operator<<(std::ostream &o, cfg::AConfigs const &i);

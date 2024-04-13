@@ -29,10 +29,14 @@ cfg::Configs::Configs(std::string const &filename) : AConfigs("configs")
 	}
 	// std::cout << "size: " << _configs.size() << std::endl;
 	file.close();
-	setGroupLevel(0, _configs.begin(), _configs.end());
+
 }
 
 cfg::Configs::~Configs()
 {
 
 }
+
+
+void cfg::Configs::validate() const
+{}

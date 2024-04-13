@@ -6,19 +6,19 @@ cfg::AConfigs::AConfigs(std::string const &type) : AConfig(type)
 
 cfg::AConfigs::~AConfigs()
 {
-	std::vector<cfg::AConfig*>::const_iterator it = this->begin();
+	cfg::config_itc it = this->begin();
 	while (it != this->end()) {
 		delete *it;
 		it++;
 	}
 }
 
-std::vector<cfg::AConfig*>::const_iterator cfg::AConfigs::begin() const
+cfg::config_itc cfg::AConfigs::begin() const
 {
 	return _configs.begin();
 }
 
-std::vector<cfg::AConfig*>::const_iterator cfg::AConfigs::end() const
+cfg::config_itc cfg::AConfigs::end() const
 {
 	return _configs.end();
 }
@@ -28,9 +28,7 @@ std::size_t cfg::AConfigs::size() const
 	return (_configs.size());
 }
 
-void cfg::AConfigs::setGroupLevel(int n,
-	std::vector<AConfig*>::const_iterator begin,
-	std::vector<AConfig*>::const_iterator end)
+void cfg::AConfigs::setGroupLevel(int n, config_itc begin, config_itc end)
 {
 	AConfigs *configs;
 	while (begin != end) {
@@ -43,10 +41,25 @@ void cfg::AConfigs::setGroupLevel(int n,
 	}
 }
 
+void cfg::AConfigs::getListen(Listens &listens, config_itc begin, config_itc end) const
+{
+	AConfigs *configs;
+	while (begin != end) {
+		if ((*begin)->getType() == "listen") {
+			cfg::Listen *listen = dynamic_cast<cfg::Listen*>(*begin); 
+			listens[(*listen).first()].push_back((*listen).second());
+		}
+		if ((configs = dynamic_cast<AConfigs*>(*begin))) {
+			getListen(listens, configs->begin(), configs->end());
+		}
+		begin++;
+	}
+}
+
 std::ostream & operator<<(std::ostream &o, cfg::AConfigs const &i)
 {
-	std::vector<cfg::AConfig*>::const_iterator it = i.begin();
-	std::vector<cfg::AConfig*>::const_iterator it_in;
+	cfg::config_itc it = i.begin();
+	cfg::config_itc it_in;
 	cfg::Worker_processes *work;
 	cfg::Http *http;
 	cfg::Server *server;
