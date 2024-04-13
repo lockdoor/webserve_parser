@@ -32,6 +32,8 @@ void cfg::Location::init(std::ifstream &file)
 				dir = new Index(file);
 			else if (directive == "root")
 				dir = new Root(file);
+			else if (directive == "redirect")
+				dir = new Redirect(file);
 			else
 				throw(std::runtime_error(this->getType() + "Error: unknow directive " + directive));
 

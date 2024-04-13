@@ -15,6 +15,7 @@
 namespace cfg
 {
 	typedef std::map<std::string, std::vector<std::string> > Listens;
+	typedef std::vector<std::pair<std::string, std::string> > ListenPairs;
 
 	class AConfig
 	{
@@ -39,6 +40,8 @@ namespace cfg
 
 	typedef std::vector<AConfig*>::const_iterator config_itc;
 
+	/* ----------------------- group config ---------------------------*/
+
 	class AConfigs : public AConfig
 	{
 		protected:
@@ -52,7 +55,8 @@ namespace cfg
 			std::size_t size() const;
 
 			void setGroupLevel(int n, config_itc begin, config_itc end);
-			void getListen(Listens &listen, config_itc begin, config_itc end) const;
+			void getListen(Listens &listens, config_itc begin, config_itc end) const;
+			void getListenPairs(ListenPairs &listens, config_itc begin, config_itc end) const;
 	};
 
 	class AGroup : public AConfigs
@@ -107,16 +111,69 @@ namespace cfg
 			std::string const &getLocation() const;
 	};
 	
-	class Worker_processes : public AConfig
+	/* -------------------------- single config ---------------------------- */
+
+	/* ---------------------------- Int ------------------------------------ */
+	
+	class AConfigInt : public AConfig
 	{
 		private:
 			int _value;
 		public:
-			Worker_processes(std::ifstream &file);
-			~Worker_processes();
+			AConfigInt(std::ifstream &file, std::string const &type);
+			virtual ~AConfigInt();
 			int getValue() const;
 	};
 
+	class Worker_processes : public AConfigInt
+	{
+		public:
+			Worker_processes(std::ifstream &file);
+			~Worker_processes();
+	};
+
+	class Client_max_body : public AConfigInt
+	{
+		public:
+			Client_max_body(std::ifstream &file);
+			~Client_max_body();
+	};
+	
+
+	/* ---------------------- String ------------------------------- */
+
+	class AConfigString : public AConfig
+	{
+		private:
+			std::string _str;
+		public:
+			AConfigString(std::ifstream &file, std::string const &type);
+			virtual ~AConfigString();
+			std::string const & str() const;
+	};
+	
+	class Root : public AConfigString
+	{
+		public:
+			Root(std::ifstream &file);
+			~Root();
+	};
+
+	class Redirect : public AConfigString
+	{
+		public:
+			Redirect(std::ifstream &file);
+			~Redirect();
+	};
+
+	class Error_page : public AConfigString
+	{
+		public:
+			Error_page(std::ifstream &file);
+			~Error_page();
+	};
+
+	/* ---------------------------- etc ------------------------- */
 	class Listen : public AConfig
 	{
 		private:
@@ -138,23 +195,11 @@ namespace cfg
 			std::vector<std::string>::const_iterator begin() const;
 			std::vector<std::string>::const_iterator end() const;
 	};
-
-	class Root : public AConfig
-	{
-		private:
-			std::string _root;
-		public:
-			Root(std::ifstream &file);
-			~Root();
-			std::string const &getRoot() const;
-	};
-
-
 }
 
 std::ostream & operator<<(std::ostream &o, cfg::AConfigs const &i);
-std::ostream & operator<<(std::ostream &o, cfg::Worker_processes const &i);
+std::ostream & operator<<(std::ostream &o, cfg::AConfigInt const &i);
 std::ostream & operator<<(std::ostream &o, cfg::Index const &i);
 std::ostream & operator<<(std::ostream &o, cfg::Listen const &i);
-std::ostream & operator<<(std::ostream &o, cfg::Root const &i);
+std::ostream & operator<<(std::ostream &o, cfg::AConfigString const &i);
 #endif

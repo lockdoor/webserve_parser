@@ -56,6 +56,24 @@ void cfg::AConfigs::getListen(Listens &listens, config_itc begin, config_itc end
 	}
 }
 
+void cfg::AConfigs::getListenPairs(ListenPairs &listens, config_itc begin, config_itc end) const
+{
+	AConfigs *configs;
+	while (begin != end) {
+		if ((*begin)->getType() == "listen") {
+			cfg::Listen *listen = dynamic_cast<cfg::Listen*>(*begin);
+			std::pair<std::string, std::string> p;
+			p.first = (*listen).first();
+			p.second = (*listen).second();
+			listens.push_back(p);
+		}
+		if ((configs = dynamic_cast<AConfigs*>(*begin))) {
+			getListenPairs(listens, configs->begin(), configs->end());
+		}
+		begin++;
+	}
+}
+
 std::ostream & operator<<(std::ostream &o, cfg::AConfigs const &i)
 {
 	cfg::config_itc it = i.begin();
@@ -65,7 +83,7 @@ std::ostream & operator<<(std::ostream &o, cfg::AConfigs const &i)
 	cfg::Server *server;
 	cfg::Index *index;
 	cfg::Listen *listen;
-	cfg::Root *root;
+	cfg::AConfigString *aConfigString;
 	cfg::Location *location;
 	
 	while(it != i.end()) {
@@ -101,8 +119,8 @@ std::ostream & operator<<(std::ostream &o, cfg::AConfigs const &i)
 		if ((listen = dynamic_cast<cfg::Listen*>(*it)))
 			o << *listen;
 
-		if ((root = dynamic_cast<cfg::Root*>(*it)))
-			o << *root;
+		if ((aConfigString = dynamic_cast<cfg::AConfigString*>(*it)))
+			o << *aConfigString;
 
 		it++;
 	}

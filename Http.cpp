@@ -22,8 +22,6 @@ void cfg::Http::init(std::ifstream &file)
 			AConfig *dir;
 			file >> directive;
 			if (directive == "}") break;
-			else if (directive == "index")
-				dir = new Index(file);
 			else if (directive == "server")
 				dir = new Server(file);
 			else

@@ -27,6 +27,10 @@ void cfg::Server::init(std::ifstream &file)
 				dir = new Root(file);
 			else if (directive == "location")
 				dir = new Location(file);
+			else if (directive == "error_page")
+				dir = new Error_page(file);
+			else if (directive == "client_max_body")
+				dir = new Client_max_body(file);
 			else
 				throw(std::runtime_error(this->getType() + "Error: unknow directive " + directive));
 

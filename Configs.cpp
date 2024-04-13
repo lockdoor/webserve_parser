@@ -14,9 +14,7 @@ cfg::Configs::Configs(std::string const &filename) : AConfigs("configs")
 			std::string directive;
 			file >> directive;
 			if (file.eof() && file.fail()) break;
-			if (directive == "worker_processes")
-				dir = new Worker_processes(file);
-			else if (directive == "http")
+			if (directive == "http")
 				dir = new Http(file);
 			else
 				throw(std::runtime_error("Error: unknow directive " + directive));
