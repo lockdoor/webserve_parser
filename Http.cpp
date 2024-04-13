@@ -1,20 +1,21 @@
 #include "Configs.hpp"
 
-cfg::Http::Http(std::ifstream &file) : AConfigs("http")
+cfg::Http::Http(std::ifstream &file) : AGroup(file, "http")
 {
-	std::string directive;
-	file.peek();
+	firstBracket(file);
+	init(file);
+}
 
-	if (file.eof()) 
-		throw (std::runtime_error("Error: " + this->getType()));
-	
-	file >> directive;
-	
-	if (directive != "{") 
-		throw (std::runtime_error("Error: " + this->getType() + " '{' not found"));
+cfg::Http::~Http()
+{
 
+}
+
+void cfg::Http::init(std::ifstream &file)
+{
 	while(true) {
 		try {
+			std::string directive;
 			file.peek();
 			if (file.eof()) 
 				throw (std::runtime_error("Error: " + this->getType() + " '}' not found"));
@@ -27,14 +28,10 @@ cfg::Http::Http(std::ifstream &file) : AConfigs("http")
 				dir = new Server(file);
 			else
 				throw(std::runtime_error(this->getType() + "Error: unknow directive " + directive));
+
 			_configs.push_back(dir);
 		} catch (std::exception const &e) {
 			throw ;
 		}
 	}
-}
-
-cfg::Http::~Http()
-{
-
 }

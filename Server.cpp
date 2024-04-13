@@ -1,20 +1,18 @@
 #include "Configs.hpp"
 
-cfg::Server::Server(std::ifstream &file) : AConfigs("server")
+cfg::Server::Server(std::ifstream &file) : AGroup(file, "server")
 {
-	std::string directive;
-	file.peek();
+	firstBracket(file);
+	init(file);
+}
 
-	if (file.eof()) 
-		throw (std::runtime_error("Error: " + this->getType()));
-	
-	file >> directive;
-	
-	if (directive != "{") 
-		throw (std::runtime_error("Error: " + this->getType() + " '{' not found"));
+cfg::Server::~Server() {}
 
+void cfg::Server::init(std::ifstream &file)
+{
 	while(true) {
 		try {
+			std::string directive;
 			file.peek();
 			if (file.eof()) 
 				throw (std::runtime_error("Error: " + this->getType() + " '}' not found"));
@@ -31,11 +29,10 @@ cfg::Server::Server(std::ifstream &file) : AConfigs("server")
 				dir = new Location(file);
 			else
 				throw(std::runtime_error(this->getType() + "Error: unknow directive " + directive));
+
 			_configs.push_back(dir);
 		} catch (std::exception const &e) {
 			throw ;
 		}
 	}
 }
-
-cfg::Server::~Server() {}

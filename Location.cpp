@@ -1,6 +1,6 @@
 #include "Configs.hpp"
 
-cfg::Location::Location(std::ifstream &file) : AConfigs("location")
+cfg::Location::Location(std::ifstream &file) : AGroup(file, "location")
 {
 	// parser location
 	if (file.peek() <= 0) 
@@ -11,20 +11,17 @@ cfg::Location::Location(std::ifstream &file) : AConfigs("location")
 	if (found_semicolon)
 		throw (std::runtime_error("Error: " + this->getType()));
 
-	// parser block
-	std::string directive;
-	file.peek();
+	firstBracket(file);
+	init(file);
+}
 
-	if (file.eof()) 
-		throw (std::runtime_error("Error: " + this->getType()));
-	
-	file >> directive;
-	
-	if (directive != "{") 
-		throw (std::runtime_error("Error: " + this->getType() + " '{' not found"));
+cfg::Location::~Location(){}
 
+void cfg::Location::init(std::ifstream &file)
+{
 	while(true) {
 		try {
+			std::string directive;
 			file.peek();
 			if (file.eof()) 
 				throw (std::runtime_error("Error: " + this->getType() + " '}' not found"));
@@ -37,14 +34,13 @@ cfg::Location::Location(std::ifstream &file) : AConfigs("location")
 				dir = new Root(file);
 			else
 				throw(std::runtime_error(this->getType() + "Error: unknow directive " + directive));
+
 			_configs.push_back(dir);
 		} catch (std::exception const &e) {
 			throw ;
 		}
 	}
 }
-
-cfg::Location::~Location(){}
 
 std::string const & cfg::Location::getLocation() const
 {

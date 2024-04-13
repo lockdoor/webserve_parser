@@ -7,9 +7,11 @@ CFLAGS = -Wall -Werror -Wextra -std=c++98
 SRCS = main.cpp \
 		AConfig.cpp \
 		AConfigs.cpp \
+		AGroup.cpp \
 		Configs.cpp \
 		Worker_processes.cpp \
-		Http.cpp Server.cpp \
+		Http.cpp \
+		Server.cpp \
 		Listen.cpp \
 		Index.cpp \
 		Root.cpp \

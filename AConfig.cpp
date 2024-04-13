@@ -1,7 +1,7 @@
 #include "Configs.hpp"
 #include <iostream>
 
-cfg::AConfig::AConfig(std::string const &type) : _type(type) {}
+cfg::AConfig::AConfig(std::string const &type) : _type(type), _level(0) {}
 
 cfg::AConfig::AConfig(){}
 
@@ -53,4 +53,23 @@ bool cfg::AConfig::getString(std::string &buffer, std::ifstream &file)
         return (true);
     }
     return (false);
+}
+
+void cfg::AConfig::setLevel(int level)
+{
+    _level = level + 1;
+}
+
+int cfg::AConfig::getLevel() const
+{
+   return _level;
+}
+
+std::string cfg::AConfig::indent() const
+{
+    std::string inden = "";
+    for (int i = 0; i < _level; i++) {
+        inden += '\t';
+    }
+    return (inden);
 }

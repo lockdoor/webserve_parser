@@ -28,6 +28,21 @@ std::size_t cfg::AConfigs::size() const
 	return (_configs.size());
 }
 
+void cfg::AConfigs::setGroupLevel(int n,
+	std::vector<AConfig*>::const_iterator begin,
+	std::vector<AConfig*>::const_iterator end)
+{
+	AConfigs *configs;
+	while (begin != end) {
+
+		(*begin)->setLevel(n);
+		if ((configs = dynamic_cast<AConfigs*>(*begin))){
+			setGroupLevel(n + 1, (*configs).begin(), (*configs).end());
+		}
+		begin++;
+	}
+}
+
 std::ostream & operator<<(std::ostream &o, cfg::AConfigs const &i)
 {
 	std::vector<cfg::AConfig*>::const_iterator it = i.begin();
@@ -41,37 +56,40 @@ std::ostream & operator<<(std::ostream &o, cfg::AConfigs const &i)
 	cfg::Location *location;
 	
 	while(it != i.end()) {
+
+		o << i.indent();
+
 		if ((work = dynamic_cast<cfg::Worker_processes*>(*it)))
 			o << *work << std::endl;
 		
 		if ((http = dynamic_cast<cfg::Http*>(*it))) {
 			o << http->getType() << " {" << std::endl;
 			o << *http;
-			o << "}" << std::endl;
+			o << i.indent() << "}" << std::endl;
 		}
 
 		if ((server = dynamic_cast<cfg::Server*>(*it))) {
 			// o << "server size: " << server->size() << std::endl;
 			o << server->getType() << " {" << std::endl;
 			o << *server;
-			o << "}" << std::endl;
+			o << i.indent() << "}" << std::endl;
 		}
 
 		if ((location = dynamic_cast<cfg::Location*>(*it))) {
 			// o << "locationsize: " << location>size() << std::endl;
 			o << location->getType() << " " << location->getLocation() << " {" << std::endl;
 			o << *location;
-			o << "}" << std::endl;
+			o << i.indent() << "}" << std::endl;
 		}
 
 		if ((index = dynamic_cast<cfg::Index*>(*it)))
-			std::cout << *index << std::endl;
+			o << *index << std::endl;
 
 		if ((listen = dynamic_cast<cfg::Listen*>(*it)))
-			std::cout << *listen;
+			o << *listen;
 
 		if ((root = dynamic_cast<cfg::Root*>(*it)))
-			std::cout << *root;
+			o << *root;
 
 		it++;
 	}

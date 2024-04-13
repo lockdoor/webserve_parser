@@ -20,6 +20,7 @@ cfg::Configs::Configs(std::string const &filename) : AConfigs("configs")
 				dir = new Http(file);
 			else
 				throw(std::runtime_error("Error: unknow directive " + directive));
+
 			_configs.push_back(dir);
 		} catch (std::exception const &e) {
 			file.close();
@@ -28,6 +29,7 @@ cfg::Configs::Configs(std::string const &filename) : AConfigs("configs")
 	}
 	// std::cout << "size: " << _configs.size() << std::endl;
 	file.close();
+	setGroupLevel(0, _configs.begin(), _configs.end());
 }
 
 cfg::Configs::~Configs()

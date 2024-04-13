@@ -10,8 +10,6 @@
 #include <string>
 #include <iostream>
 
-typedef std::map<std::string, std::vector<std::string> >::const_iterator const_iterator_listen;
-
 namespace cfg
 {
 	
@@ -21,6 +19,8 @@ namespace cfg
 		private:
 			std::string _type;
 			AConfig();
+			int _level;
+
 		public:
 			AConfig(std::string const &type);
 			AConfig(AConfig const &ins);
@@ -28,19 +28,37 @@ namespace cfg
 			virtual ~AConfig();
 			std::string const & getType() const;
 			void end_directive(std::ifstream &file);
-			bool getString(std::string &buffer, std::ifstream &file);			
+			bool getString(std::string &buffer, std::ifstream &file);
+
+			void setLevel(int level);
+			int getLevel() const;
+			std::string indent() const;
 	};
 
 	class AConfigs : public AConfig
 	{
 		protected:
 			std::vector<AConfig*> _configs;
+			void setGroupLevel(int n, 
+				std::vector<AConfig*>::const_iterator begin,
+				std::vector<AConfig*>::const_iterator end
+				);
 		public:
 			AConfigs(std::string const &type);
 			virtual ~AConfigs();
 			std::vector<AConfig*>::const_iterator begin() const;
 			std::vector<AConfig*>::const_iterator end() const;
 			std::size_t size() const;
+	};
+
+	class AGroup : public AConfigs
+	{
+		protected:
+			void virtual init(std::ifstream &file) = 0;
+			void firstBracket(std::ifstream &file);
+		public:
+			AGroup(std::ifstream &file, std::string const &type);
+			virtual ~AGroup();	
 	};
 
 	class Configs : public AConfigs
@@ -50,15 +68,19 @@ namespace cfg
 			~Configs();
 	};
 
-	class Http : public AConfigs
+	class Http : public AGroup
 	{
+		private:
+			void init(std::ifstream &file);
 		public:
 			Http(std::ifstream &file);
 			~Http();
 	};
 
-	class Server : public AConfigs
+	class Server : public AGroup
 	{
+		private:
+			void init(std::ifstream &file);
 		public:
 			Server(std::ifstream &file);
 			~Server();
@@ -106,10 +128,11 @@ namespace cfg
 			std::string const &getRoot() const;
 	};
 
-	class Location : public AConfigs
+	class Location : public AGroup
 	{
 		private:
 			std::string _location;
+			void init(std::ifstream &file);
 		public:
 			Location(std::ifstream &file);
 			~Location();
