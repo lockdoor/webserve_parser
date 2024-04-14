@@ -9,10 +9,11 @@ int main(void)
         
         std::cout << configs << std::endl;
 
-        std::string *root = configs.getRoot("localhost", "/");
+        std::string root = configs.getRoot("localhost", "/");
 
-        if (root)
-            std::cout << "Root: " << *root << std::endl;
+        std::cout << "Root: " << root << std::endl;
+
+        // std::string index = configs.
 
 
         // cfg::Listens listens;

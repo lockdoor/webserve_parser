@@ -47,14 +47,16 @@ void cfg::Http::setRoot()
 	}
 }
 
-std::string * cfg::Http::getRoot(std::string const &server_name, std::string const &location)
+std::string const & cfg::Http::getRoot(std::string const &server_name, std::string const &location)
 {
-	if(!_root.count(server_name)) return (NULL);
+	if(!_root.count(server_name)) 
+		throw (std::runtime_error("getRoot server_name not found"));
 	std::map<std::string, std::string> &locate = _root[server_name];
 
-	if (!locate.count(location)) return (NULL);
+	if (!locate.count(location)) 
+		throw (std::runtime_error("getRoot location not found"));
 	
-	return (&locate[location]);
+	return (locate[location]);
 } 
 
 void cfg::Http::validate() const

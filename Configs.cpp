@@ -48,7 +48,7 @@ void cfg::Configs::setHttp()
 		throw (std::runtime_error("validate Config no http or more http"));
 }
 
-std::string * cfg::Configs::getRoot(std::string const &server_name, std::string const &location) 
+std::string const & cfg::Configs::getRoot(std::string const &server_name, std::string const &location) 
 {
 	return ((*_http).getRoot(server_name, location));
 }

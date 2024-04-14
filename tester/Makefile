@@ -13,6 +13,7 @@ HEADERS = $(Include)Configs.hpp
 OBJS = $(SRCS:.cpp=.o)
 
 all: $(NAME)
+	make -C ..
 	./$(NAME)
 
 $(OBJS): %.o: %.cpp $(HEADERS) Makefile

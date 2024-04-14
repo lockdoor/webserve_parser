@@ -7,6 +7,9 @@ cfg::Server::Server(std::ifstream &file) : AGroup(file, "server")
 	setServerName();
 	setRoot();
 	setLocation();
+	setErrorPage();
+	setClientMaxBody();
+	setIndex();
 	// validate();
 }
 
@@ -121,6 +124,69 @@ void cfg::Server::setLocation()
 std::map<std::string, std::string> const & cfg::Server::getLocation() const
 {
 	return (_location);
+}
+
+void cfg::Server::setErrorPage()
+{
+	_error_page = "";
+	Error_page *error_page;
+	std::size_t n = 0;
+	for(config_itc it = _configs.begin(); it != _configs.end(); it++) {
+		if((error_page = dynamic_cast<Error_page*>(*it))) {
+			_error_page = (*error_page).str();
+			n++ ;
+		}
+	}
+	if (n > 1) throw(std::runtime_error("validate server error_page"));
+}
+
+std::string const & cfg::Server::getErrorPage() const
+{
+	return (_error_page);
+}
+
+void cfg::Server::setClientMaxBody()
+{
+	_client_max_body = -1;
+	Client_max_body *client_max_body;
+	std::size_t n = 0;
+	for(config_itc it = _configs.begin(); it != _configs.end(); it++) {
+		if((client_max_body = dynamic_cast<Client_max_body*>(*it))) {
+			_client_max_body = (*client_max_body).getValue();
+			n++ ;
+		}
+	}
+	if (n > 1) throw(std::runtime_error("validate server error_page"));
+}
+
+int cfg::Server::getClientMaxBody() const
+{
+	return (_client_max_body);
+}
+
+void cfg::Server::setIndex()
+{
+	Index *index;
+	Location *location;
+	std::vector<std::string> indexs;
+	for(config_itc it = _configs.begin(); it != _configs.end(); it++) {
+		if((index = dynamic_cast<cfg::Index*>(*it))) {
+			indexs.insert(indexs.end(), index->begin(), index->end());
+		}
+	}
+	for(config_itc it = _configs.begin(); it != _configs.end(); it++) {
+		std::vector<std::string> ind = indexs;
+		if((location = dynamic_cast<cfg::Location*>(*it))) {
+			std::vector<std::string> const & location_index = location->getIndex();
+			ind.insert(ind.end(), location_index.begin(), location_index.end());
+			_index[location->getLocation()] = ind;
+		}
+	}
+}
+
+std::map<std::string, std::vector<std::string> > const & cfg::Server::getIndex() const
+{
+	return (_index);
 }
 
 void cfg::Server::validate() const

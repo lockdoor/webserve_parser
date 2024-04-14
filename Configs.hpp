@@ -74,7 +74,7 @@ namespace cfg
 	};
 
 	class Http;
-	
+
 	class Configs : public AConfigs
 	{
 		private:
@@ -84,7 +84,7 @@ namespace cfg
 		public:
 			Configs(std::string const &filename);
 			~Configs();
-			std::string * getRoot(std::string const &server_name, 
+			std::string const & getRoot(std::string const &server_name, 
 				std::string const &location);
 			
 	};
@@ -99,7 +99,7 @@ namespace cfg
 		public:
 			Http(std::ifstream &file);
 			~Http();
-			std::string * getRoot(std::string const &server_name, 
+			std::string const & getRoot(std::string const &server_name, 
 				std::string const &location);
 	};
 
@@ -108,19 +108,29 @@ namespace cfg
 		private:
 			std::string _server_name;
 			std::string _root;
+			std::string _error_page;
+			int _client_max_body;
 			std::map<std::string, std::string> _location; // <location, root>
+			std::map<std::string, std::vector<std::string> > _index; // <location, indexs>
 			void init(std::ifstream &file);
 			void validate() const;
 			void setServerName();
 			void setRoot();
 			void setLocation();
+			void setErrorPage();
+			void setClientMaxBody();
+			void setIndex();
 		public:
 			Server(std::ifstream &file);
 			~Server();
 
 			std::string const & getServerName() const;
 			std::string const & getRoot() const;
+			std::string const & getErrorPage() const;
+			int getClientMaxBody() const;
 			std::map<std::string, std::string> const & getLocation() const;
+			std::map<std::string, std::vector<std::string> > const & getIndex() const;
+			
 	};
 
 	class Location : public AGroup
@@ -128,14 +138,17 @@ namespace cfg
 		private:
 			std::string _location;
 			std::string _root;
+			std::vector<std::string> _index;
 			void init(std::ifstream &file);
 			void validate() const;
 			void setRoot();
+			void setIndex();
 		public:
 			Location(std::ifstream &file);
 			~Location();
 			std::string const &getLocation() const;
 			std::string const &getRoot() const;
+			std::vector<std::string> const &getIndex() const;
 	};
 	
 	/* -------------------------- single config ---------------------------- */

@@ -14,6 +14,7 @@ cfg::Location::Location(std::ifstream &file) : AGroup(file, "location")
 	firstBracket(file);
 	init(file);
 	setRoot();
+	setIndex();
 	// validate();
 }
 
@@ -68,6 +69,21 @@ void cfg::Location::setRoot()
 std::string const & cfg::Location::getRoot() const
 {
 	return (_root);
+}
+
+void cfg::Location::setIndex()
+{
+	Index *index;
+	for(config_itc it = _configs.begin(); it != _configs.end(); it++) {
+		if((index = dynamic_cast<Index*>(*it))) {
+			_index.insert(_index.end(), index->begin(), index->end());
+		}
+	}
+}
+
+std::vector<std::string> const & cfg::Location::getIndex() const
+{
+	return (_index);
 }
 
 void cfg::Location::validate() const
