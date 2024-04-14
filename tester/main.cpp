@@ -6,7 +6,13 @@ int main(void)
         // std::ifstream file("default.conf");
         cfg::Configs configs("default.conf");
         configs.setGroupLevel(0, configs.begin(), configs.end());
+        
         std::cout << configs << std::endl;
+
+        std::string *root = configs.getRoot("localhost", "/");
+
+        if (root)
+            std::cout << "Root: " << *root << std::endl;
 
 
         // cfg::Listens listens;
@@ -18,12 +24,13 @@ int main(void)
         //                 std::cout << "listen" << it->first << ":" << *itt << std::endl;
         //         }
         // }
-        cfg::ListenPairs listens;
-        configs.getListenPairs(listens, configs.begin(), configs.end());
-        for(cfg::ListenPairs::const_iterator it = listens.begin();
-            it != listens.end(); it++) {
-                std::cout << "listen " << it->first << ":" << it->second << std::endl;
-        }
+
+        // cfg::ListenPairs listens;
+        // configs.getListenPairs(listens, configs.begin(), configs.end());
+        // for(cfg::ListenPairs::const_iterator it = listens.begin();
+        //     it != listens.end(); it++) {
+        //         std::cout << "listen " << it->first << ":" << it->second << std::endl;
+        // }
 
     }
     catch (std::exception const &e) {

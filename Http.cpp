@@ -4,6 +4,7 @@ cfg::Http::Http(std::ifstream &file) : AGroup(file, "http")
 {
 	firstBracket(file);
 	init(file);
+	setRoot();
 }
 
 cfg::Http::~Http()
@@ -33,6 +34,28 @@ void cfg::Http::init(std::ifstream &file)
 		}
 	}
 }
+
+void cfg::Http::setRoot()
+{
+	Server *server;
+	for(config_itc it = _configs.begin(); it != _configs.end(); it++) {
+		if((server = dynamic_cast<cfg::Server*>(*it))) {
+			if (_root.count((*server).getServerName()))
+				throw (std::runtime_error ("validate http duplicate server"));
+			_root[(*server).getServerName()] = (*server).getLocation();
+		}
+	}
+}
+
+std::string * cfg::Http::getRoot(std::string const &server_name, std::string const &location)
+{
+	if(!_root.count(server_name)) return (NULL);
+	std::map<std::string, std::string> &locate = _root[server_name];
+
+	if (!locate.count(location)) return (NULL);
+	
+	return (&locate[location]);
+} 
 
 void cfg::Http::validate() const
 {}

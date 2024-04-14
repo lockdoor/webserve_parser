@@ -13,6 +13,8 @@ cfg::Location::Location(std::ifstream &file) : AGroup(file, "location")
 
 	firstBracket(file);
 	init(file);
+	setRoot();
+	// validate();
 }
 
 cfg::Location::~Location(){}
@@ -49,7 +51,25 @@ std::string const & cfg::Location::getLocation() const
 	return (_location);
 }
 
+void cfg::Location::setRoot()
+{
+	std::size_t n = 0;
+	_root = "";
+	for(config_itc it = _configs.begin(); it != _configs.end(); it++) {
+		Root *root;
+		if ((root = dynamic_cast<cfg::Root*>(*it))) {
+			_root = (*root).str();
+			n++ ;
+		}
+		if (n > 1) throw (std::runtime_error("validate root on location"));
+	}
+}
+
+std::string const & cfg::Location::getRoot() const
+{
+	return (_root);
+}
+
 void cfg::Location::validate() const
 {
-	
 }

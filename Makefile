@@ -14,6 +14,7 @@ SRCS =	AConfig.cpp \
 		Client_max_body.cpp \
 		Http.cpp \
 		Server.cpp \
+		Server_name.cpp \
 		Listen.cpp \
 		Index.cpp \
 		Root.cpp \

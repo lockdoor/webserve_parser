@@ -46,7 +46,11 @@ namespace cfg
 	{
 		protected:
 			std::vector<AConfig*> _configs;
+
+			/* validate */
 			void virtual validate() const = 0;
+			std::size_t count_root(config_itc begin, config_itc end) const;
+
 		public:
 			AConfigs(std::string const &type);
 			virtual ~AConfigs();
@@ -69,46 +73,69 @@ namespace cfg
 			virtual ~AGroup();	
 	};
 
+	class Http;
+	
 	class Configs : public AConfigs
 	{
 		private:
+			Http *_http;
 			void validate() const;
+			void setHttp();
 		public:
 			Configs(std::string const &filename);
 			~Configs();
+			std::string * getRoot(std::string const &server_name, 
+				std::string const &location);
 			
 	};
 
 	class Http : public AGroup
 	{
 		private:
+			std::map<std::string, std::map<std::string, std::string> > _root;
 			void init(std::ifstream &file);
 			void validate() const;
+			void setRoot();
 		public:
 			Http(std::ifstream &file);
 			~Http();
+			std::string * getRoot(std::string const &server_name, 
+				std::string const &location);
 	};
 
 	class Server : public AGroup
 	{
 		private:
+			std::string _server_name;
+			std::string _root;
+			std::map<std::string, std::string> _location; // <location, root>
 			void init(std::ifstream &file);
 			void validate() const;
+			void setServerName();
+			void setRoot();
+			void setLocation();
 		public:
 			Server(std::ifstream &file);
 			~Server();
+
+			std::string const & getServerName() const;
+			std::string const & getRoot() const;
+			std::map<std::string, std::string> const & getLocation() const;
 	};
 
 	class Location : public AGroup
 	{
 		private:
 			std::string _location;
+			std::string _root;
 			void init(std::ifstream &file);
 			void validate() const;
+			void setRoot();
 		public:
 			Location(std::ifstream &file);
 			~Location();
 			std::string const &getLocation() const;
+			std::string const &getRoot() const;
 	};
 	
 	/* -------------------------- single config ---------------------------- */
@@ -150,6 +177,13 @@ namespace cfg
 			AConfigString(std::ifstream &file, std::string const &type);
 			virtual ~AConfigString();
 			std::string const & str() const;
+	};
+
+	class Server_name : public AConfigString
+	{
+		public:
+			Server_name(std::ifstream &file);
+			~Server_name();
 	};
 	
 	class Root : public AConfigString

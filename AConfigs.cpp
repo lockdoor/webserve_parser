@@ -74,6 +74,17 @@ void cfg::AConfigs::getListenPairs(ListenPairs &listens, config_itc begin, confi
 	}
 }
 
+std::size_t cfg::AConfigs::count_root(config_itc begin, config_itc end) const
+{
+	Root *root;
+	std::size_t n = 0;
+	for(;begin != end; begin++) {
+		if ((root = dynamic_cast<cfg::Root*>(*begin)))
+			n++;
+	}
+	return (n);
+}
+
 std::ostream & operator<<(std::ostream &o, cfg::AConfigs const &i)
 {
 	cfg::config_itc it = i.begin();
