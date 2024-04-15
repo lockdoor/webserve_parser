@@ -82,8 +82,8 @@ void cfg::Server::setListen()
 			n++ ;
 			_listen.push_back(listen->getListen());
 		}
-		if (!n) throw(std::runtime_error("validate listen on server"));
 	}
+	if (!n) throw(std::runtime_error("validate listen on server"));
 }
 
 std::vector<std::pair<std::string, std::string> > const & cfg::Server::getListen() const
