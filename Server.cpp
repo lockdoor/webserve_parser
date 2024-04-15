@@ -168,18 +168,18 @@ void cfg::Server::setIndex()
 {
 	Index *index;
 	Location *location;
-	std::vector<std::string> indexs;
+	std::vector<std::string> server_index;
 	for(config_itc it = _configs.begin(); it != _configs.end(); it++) {
 		if((index = dynamic_cast<cfg::Index*>(*it))) {
-			indexs.insert(indexs.end(), index->begin(), index->end());
+			server_index.insert(server_index.end(), index->begin(), index->end());
 		}
 	}
 	for(config_itc it = _configs.begin(); it != _configs.end(); it++) {
-		std::vector<std::string> ind = indexs;
 		if((location = dynamic_cast<cfg::Location*>(*it))) {
-			std::vector<std::string> const & location_index = location->getIndex();
-			ind.insert(ind.end(), location_index.begin(), location_index.end());
-			_index[location->getLocation()] = ind;
+			if(location->getIndex().size())
+				_index[location->getLocation()] = location->getIndex();
+			else
+				_index[location->getLocation()] = server_index;
 		}
 	}
 }

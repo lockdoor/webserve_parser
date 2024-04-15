@@ -46,6 +46,16 @@ bool cfg::AConfig::getString(std::string &buffer, std::ifstream &file)
 {
     file >> buffer;
     std::size_t semi_colon = buffer.find(';');
+
+    // std::size_t comment = buffer.find('#');
+    // if (comment != std::string::npos) {
+    //     if (semi_colon != std::string::npos) {
+    //         if (comment < semi_colon) {
+
+    //         }
+    //     }
+    // }
+
     if (semi_colon != std::string::npos) {
         std::size_t pos_end = file.tellg();
         file.seekg(pos_end - (buffer.length() - semi_colon - 1));

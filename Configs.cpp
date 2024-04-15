@@ -50,7 +50,13 @@ void cfg::Configs::setHttp()
 
 std::string const & cfg::Configs::getRoot(std::string const &server_name, std::string const &location) 
 {
-	return ((*_http).getRoot(server_name, location));
+	return (_http->getRoot(server_name, location));
+}
+
+std::vector<std::string> const & cfg::Configs::getIndex(std::string const &server_name, 
+	std::string const &location)
+{
+	return (_http->getIndex(server_name, location));
 }
 
 void cfg::Configs::validate() const

@@ -86,6 +86,8 @@ namespace cfg
 			~Configs();
 			std::string const & getRoot(std::string const &server_name, 
 				std::string const &location);
+			std::vector<std::string> const & getIndex(std::string const &server_name, 
+				std::string const &location);
 			
 	};
 
@@ -93,13 +95,16 @@ namespace cfg
 	{
 		private:
 			std::map<std::string, std::map<std::string, std::string> > _root;
+			std::map<std::string, std::map<std::string, std::vector<std::string> > > _index;
 			void init(std::ifstream &file);
 			void validate() const;
-			void setRoot();
+			void setServer();
 		public:
 			Http(std::ifstream &file);
 			~Http();
 			std::string const & getRoot(std::string const &server_name, 
+				std::string const &location);
+			std::vector<std::string> const & getIndex(std::string const &server_name, 
 				std::string const &location);
 	};
 
