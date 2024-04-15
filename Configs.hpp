@@ -59,8 +59,8 @@ namespace cfg
 			std::size_t size() const;
 
 			void setGroupLevel(int n, config_itc begin, config_itc end);
-			void getListen(Listens &listens, config_itc begin, config_itc end) const;
-			void getListenPairs(ListenPairs &listens, config_itc begin, config_itc end) const;
+			// void getListen(Listens &listens, config_itc begin, config_itc end) const;
+			// void getListenPairs(ListenPairs &listens, config_itc begin, config_itc end) const;
 	};
 
 	class AGroup : public AConfigs
@@ -90,6 +90,7 @@ namespace cfg
 				std::string const &location);
 			int const & getClientMaxBody(std::string const &server_name);
 			std::string const & getErrorPage(std::string const &server_name);
+			std::vector<std::pair<std::string, std::string> >  const & getListen(std::string server_name);
 	};
 
 	class Http : public AGroup
@@ -99,6 +100,7 @@ namespace cfg
 			std::map<std::string, std::map<std::string, std::vector<std::string> > > _index;
 			std::map<std::string, int> _client_max_body;
 			std::map<std::string, std::string > _error_page;
+			std::map<std::string, std::vector<std::pair<std::string, std::string> > > _listen;
 			void init(std::ifstream &file);
 			void validate() const;
 			void setServer();
@@ -111,6 +113,7 @@ namespace cfg
 				std::string const &location);
 			int const & getClientMaxBody(std::string const &server_name);
 			std::string const & getErrorPage(std::string const &server_name);
+			std::vector<std::pair<std::string, std::string> >  const & getListen(std::string server_name);
 	};
 
 	class Server : public AGroup
@@ -120,11 +123,13 @@ namespace cfg
 			std::string _root;
 			std::string _error_page;
 			int _client_max_body;
+			std::vector<std::pair<std::string, std::string> > _listen;
 			std::map<std::string, std::string> _location; // <location, root>
 			std::map<std::string, std::vector<std::string> > _index; // <location, indexs>
 			void init(std::ifstream &file);
 			void validate() const;
 			void setServerName();
+			void setListen();
 			void setRoot();
 			void setLocation();
 			void setErrorPage();
@@ -140,6 +145,7 @@ namespace cfg
 			int const & getClientMaxBody() const;
 			std::map<std::string, std::string> const & getLocation() const;
 			std::map<std::string, std::vector<std::string> > const & getIndex() const;
+			std::vector<std::pair<std::string, std::string> > const & getListen() const;
 			
 	};
 
@@ -240,6 +246,7 @@ namespace cfg
 			~Listen();
 			std::string const & first() const;
 			std::string const & second() const;
+			std::pair<std::string, std::string> const & getListen() const;
 	};
 
 	class Index : public AConfig

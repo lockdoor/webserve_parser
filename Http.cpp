@@ -48,6 +48,7 @@ void cfg::Http::setServer()
 			_index[server->getServerName()] = server->getIndex();
 			_client_max_body[server->getServerName()] = server->getClientMaxBody();
 			_error_page[server->getServerName()] = server->getErrorPage();
+			_listen[server->getServerName()] = server->getListen();
 		}
 	}
 	if (!n)
@@ -85,6 +86,14 @@ std::string const & cfg::Http::getErrorPage(std::string const &server_name)
 	if (!_error_page.count(server_name))
 		throw (std::runtime_error("getClientMaxBody server_name " + server_name + " not found"));
 	return (_error_page[server_name]);
+}
+
+std::vector<std::pair<std::string, std::string> >  
+	const & cfg::Http::getListen(std::string server_name)
+{
+	if (!_listen.count(server_name))
+		throw (std::runtime_error("getListen server_name " + server_name + " not found"));
+	return (_listen[server_name]);
 }
 
 void cfg::Http::validate() const

@@ -69,5 +69,10 @@ std::string const & cfg::Configs::getErrorPage(std::string const &server_name)
 	return (_http->getErrorPage(server_name));
 }
 
+std::vector<std::pair<std::string, std::string> >  const &  cfg::Configs::getListen(std::string server_name)
+{
+	return (_http->getListen(server_name));
+}
+
 void cfg::Configs::validate() const
 {}

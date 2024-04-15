@@ -5,6 +5,7 @@ cfg::Server::Server(std::ifstream &file) : AGroup(file, "server")
 	firstBracket(file);
 	init(file);
 	setServerName();
+	setListen();
 	setRoot();
 	setLocation();
 	setErrorPage();
@@ -70,6 +71,24 @@ void cfg::Server::setServerName()
 	}
 	if (_server_name.length() == 0)
 		throw(std::runtime_error("validate server_name on server"));
+}
+
+void cfg::Server::setListen()
+{
+	std::size_t n = 0;
+	Listen *listen;
+	for(config_itc it = _configs.begin(); it != _configs.end(); it++) {
+		if ((listen=dynamic_cast<Listen*>(*it))) {
+			n++ ;
+			_listen.push_back(listen->getListen());
+		}
+		if (!n) throw(std::runtime_error("validate listen on server"));
+	}
+}
+
+std::vector<std::pair<std::string, std::string> > const & cfg::Server::getListen() const
+{
+	return (_listen);
 }
 
 void cfg::Server::setRoot()

@@ -36,6 +36,11 @@ std::string const & cfg::Listen::second() const
 	return (_listen.second);
 }
 
+std::pair<std::string, std::string> const & cfg::Listen::getListen() const
+{
+	return (_listen);
+}
+
 std::ostream & operator<<(std::ostream &o, cfg::Listen const &i)
 {
 	o << i.getType() << " " << i.first() << ":" << i.second() << ";" << std::endl;

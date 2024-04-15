@@ -41,38 +41,38 @@ void cfg::AConfigs::setGroupLevel(int n, config_itc begin, config_itc end)
 	}
 }
 
-void cfg::AConfigs::getListen(Listens &listens, config_itc begin, config_itc end) const
-{
-	AConfigs *configs;
-	while (begin != end) {
-		if ((*begin)->getType() == "listen") {
-			cfg::Listen *listen = dynamic_cast<cfg::Listen*>(*begin); 
-			listens[(*listen).first()].push_back((*listen).second());
-		}
-		if ((configs = dynamic_cast<AConfigs*>(*begin))) {
-			getListen(listens, configs->begin(), configs->end());
-		}
-		begin++;
-	}
-}
+// void cfg::AConfigs::getListen(Listens &listens, config_itc begin, config_itc end) const
+// {
+// 	AConfigs *configs;
+// 	while (begin != end) {
+// 		if ((*begin)->getType() == "listen") {
+// 			cfg::Listen *listen = dynamic_cast<cfg::Listen*>(*begin); 
+// 			listens[(*listen).first()].push_back((*listen).second());
+// 		}
+// 		if ((configs = dynamic_cast<AConfigs*>(*begin))) {
+// 			getListen(listens, configs->begin(), configs->end());
+// 		}
+// 		begin++;
+// 	}
+// }
 
-void cfg::AConfigs::getListenPairs(ListenPairs &listens, config_itc begin, config_itc end) const
-{
-	AConfigs *configs;
-	while (begin != end) {
-		if ((*begin)->getType() == "listen") {
-			cfg::Listen *listen = dynamic_cast<cfg::Listen*>(*begin);
-			std::pair<std::string, std::string> p;
-			p.first = (*listen).first();
-			p.second = (*listen).second();
-			listens.push_back(p);
-		}
-		if ((configs = dynamic_cast<AConfigs*>(*begin))) {
-			getListenPairs(listens, configs->begin(), configs->end());
-		}
-		begin++;
-	}
-}
+// void cfg::AConfigs::getListenPairs(ListenPairs &listens, config_itc begin, config_itc end) const
+// {
+// 	AConfigs *configs;
+// 	while (begin != end) {
+// 		if ((*begin)->getType() == "listen") {
+// 			cfg::Listen *listen = dynamic_cast<cfg::Listen*>(*begin);
+// 			std::pair<std::string, std::string> p;
+// 			p.first = (*listen).first();
+// 			p.second = (*listen).second();
+// 			listens.push_back(p);
+// 		}
+// 		if ((configs = dynamic_cast<AConfigs*>(*begin))) {
+// 			getListenPairs(listens, configs->begin(), configs->end());
+// 		}
+// 		begin++;
+// 	}
+// }
 
 std::size_t cfg::AConfigs::count_root(config_itc begin, config_itc end) const
 {
