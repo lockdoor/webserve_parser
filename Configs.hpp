@@ -88,7 +88,10 @@ namespace cfg
 				std::string const &location);
 			std::vector<std::string> const & getIndex(std::string const &server_name, 
 				std::string const &location);
-			
+			int const & getClientMaxBody(std::string const &server_name, 
+				std::string const &location);
+			std::string const & getErrorPage(std::string const &server_name, 
+				std::string const &location);
 	};
 
 	class Http : public AGroup
@@ -96,6 +99,8 @@ namespace cfg
 		private:
 			std::map<std::string, std::map<std::string, std::string> > _root;
 			std::map<std::string, std::map<std::string, std::vector<std::string> > > _index;
+			std::map<std::string, std::map<std::string, int> > _client_max_body;
+			std::map<std::string, std::map<std::string, std::string> > _error_page;
 			void init(std::ifstream &file);
 			void validate() const;
 			void setServer();
@@ -105,6 +110,10 @@ namespace cfg
 			std::string const & getRoot(std::string const &server_name, 
 				std::string const &location);
 			std::vector<std::string> const & getIndex(std::string const &server_name, 
+				std::string const &location);
+			int const & getClientMaxBody(std::string const &server_name, 
+				std::string const &location);
+			std::string const & getErrorPage(std::string const &server_name, 
 				std::string const &location);
 	};
 

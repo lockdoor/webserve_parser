@@ -137,7 +137,7 @@ void cfg::Server::setErrorPage()
 			n++ ;
 		}
 	}
-	if (n > 1) throw(std::runtime_error("validate server error_page"));
+	if (n != 1) throw(std::runtime_error("validate server error_page"));
 }
 
 std::string const & cfg::Server::getErrorPage() const

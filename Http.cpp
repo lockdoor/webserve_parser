@@ -46,6 +46,8 @@ void cfg::Http::setServer()
 			n++;
 			_root[server->getServerName()] = server->getLocation();
 			_index[server->getServerName()] = server->getIndex();
+			_client_max_body[server->getServerName()] = server->getClientMaxBody();
+			_error_page[server->getServerName()] = server->getErrorPage();
 		}
 	}
 	if (!n)
@@ -69,6 +71,26 @@ std::vector<std::string> const & cfg::Http::getIndex(std::string const &server_n
 	if (!_index[server_name].count(location))
 		throw (std::runtime_error("getIndex location " + location + " not found"));
 	return (_index[server_name][location]);
+}
+
+int const & cfg::Http::getClientMaxBody(std::string const &server_name, 
+	std::string const &location)
+{
+	if (!_client_max_body.count(server_name))
+		throw (std::runtime_error("getClientMaxBody server_name " + server_name + " not found"));
+	if (!_client_max_body[server_name].count(location))
+		throw (std::runtime_error("getClientMaxBody location " + location + " not found"));
+	return (_client_max_body[server_name][location]);
+}
+
+std::string const & cfg::Http::getErrorPage(std::string const &server_name, 
+	std::string const &location)
+{
+	if (!_error_page.count(server_name))
+		throw (std::runtime_error("getClientMaxBody server_name " + server_name + " not found"));
+	if (!_error_page[server_name].count(location))
+		throw (std::runtime_error("getClientMaxBody location " + location + " not found"));
+	return (_error_page[server_name][location]);
 }
 
 void cfg::Http::validate() const

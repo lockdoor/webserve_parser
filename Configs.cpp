@@ -59,5 +59,17 @@ std::vector<std::string> const & cfg::Configs::getIndex(std::string const &serve
 	return (_http->getIndex(server_name, location));
 }
 
+int const & cfg::Configs::getClientMaxBody(std::string const &server_name, 
+	std::string const &location)
+{
+	return (_http->getClientMaxBody(server_name, location));
+}
+
+std::string const & cfg::Configs::getErrorPage(std::string const &server_name, 
+	std::string const &location)
+{
+	return (_http->getErrorPage(server_name, location));
+}
+
 void cfg::Configs::validate() const
 {}
