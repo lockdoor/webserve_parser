@@ -60,7 +60,7 @@ namespace cfg
 
 			void setGroupLevel(int n, config_itc begin, config_itc end);
 			// void getListen(Listens &listens, config_itc begin, config_itc end) const;
-			// void getListenPairs(ListenPairs &listens, config_itc begin, config_itc end) const;
+			void getListenPairs(ListenPairs &listens, config_itc begin, config_itc end) const;
 	};
 
 	class AGroup : public AConfigs
