@@ -73,24 +73,18 @@ std::vector<std::string> const & cfg::Http::getIndex(std::string const &server_n
 	return (_index[server_name][location]);
 }
 
-int const & cfg::Http::getClientMaxBody(std::string const &server_name, 
-	std::string const &location)
+int const & cfg::Http::getClientMaxBody(std::string const &server_name)
 {
 	if (!_client_max_body.count(server_name))
 		throw (std::runtime_error("getClientMaxBody server_name " + server_name + " not found"));
-	if (!_client_max_body[server_name].count(location))
-		throw (std::runtime_error("getClientMaxBody location " + location + " not found"));
-	return (_client_max_body[server_name][location]);
+	return (_client_max_body[server_name]);
 }
 
-std::string const & cfg::Http::getErrorPage(std::string const &server_name, 
-	std::string const &location)
+std::string const & cfg::Http::getErrorPage(std::string const &server_name)
 {
 	if (!_error_page.count(server_name))
 		throw (std::runtime_error("getClientMaxBody server_name " + server_name + " not found"));
-	if (!_error_page[server_name].count(location))
-		throw (std::runtime_error("getClientMaxBody location " + location + " not found"));
-	return (_error_page[server_name][location]);
+	return (_error_page[server_name]);
 }
 
 void cfg::Http::validate() const

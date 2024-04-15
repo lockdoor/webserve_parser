@@ -159,7 +159,7 @@ void cfg::Server::setClientMaxBody()
 	if (n > 1) throw(std::runtime_error("validate server error_page"));
 }
 
-int cfg::Server::getClientMaxBody() const
+int const & cfg::Server::getClientMaxBody() const
 {
 	return (_client_max_body);
 }

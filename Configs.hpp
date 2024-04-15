@@ -88,10 +88,8 @@ namespace cfg
 				std::string const &location);
 			std::vector<std::string> const & getIndex(std::string const &server_name, 
 				std::string const &location);
-			int const & getClientMaxBody(std::string const &server_name, 
-				std::string const &location);
-			std::string const & getErrorPage(std::string const &server_name, 
-				std::string const &location);
+			int const & getClientMaxBody(std::string const &server_name);
+			std::string const & getErrorPage(std::string const &server_name);
 	};
 
 	class Http : public AGroup
@@ -99,8 +97,8 @@ namespace cfg
 		private:
 			std::map<std::string, std::map<std::string, std::string> > _root;
 			std::map<std::string, std::map<std::string, std::vector<std::string> > > _index;
-			std::map<std::string, std::map<std::string, int> > _client_max_body;
-			std::map<std::string, std::map<std::string, std::string> > _error_page;
+			std::map<std::string, int> _client_max_body;
+			std::map<std::string, std::string > _error_page;
 			void init(std::ifstream &file);
 			void validate() const;
 			void setServer();
@@ -111,10 +109,8 @@ namespace cfg
 				std::string const &location);
 			std::vector<std::string> const & getIndex(std::string const &server_name, 
 				std::string const &location);
-			int const & getClientMaxBody(std::string const &server_name, 
-				std::string const &location);
-			std::string const & getErrorPage(std::string const &server_name, 
-				std::string const &location);
+			int const & getClientMaxBody(std::string const &server_name);
+			std::string const & getErrorPage(std::string const &server_name);
 	};
 
 	class Server : public AGroup
@@ -141,7 +137,7 @@ namespace cfg
 			std::string const & getServerName() const;
 			std::string const & getRoot() const;
 			std::string const & getErrorPage() const;
-			int getClientMaxBody() const;
+			int const & getClientMaxBody() const;
 			std::map<std::string, std::string> const & getLocation() const;
 			std::map<std::string, std::vector<std::string> > const & getIndex() const;
 			
